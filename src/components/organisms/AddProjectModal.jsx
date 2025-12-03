@@ -26,8 +26,9 @@ export default function AddProjectModal({ isOpen, onClose, onAdd }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+        
         {/* Header */}
         <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 px-6 py-5 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -39,6 +40,7 @@ export default function AddProjectModal({ isOpen, onClose, onAdd }) {
               <p className="text-emerald-100 text-sm">Isi informasi project Anda</p>
             </div>
           </div>
+
           <button
             onClick={onClose}
             className="p-2 hover:bg-white/20 rounded-lg transition-colors"
@@ -49,6 +51,7 @@ export default function AddProjectModal({ isOpen, onClose, onAdd }) {
 
         {/* Form Content */}
         <div className="p-6 space-y-5 overflow-y-auto max-h-[calc(90vh-180px)]">
+
           {/* Title */}
           <div>
             <label className="block text-sm font-semibold text-neutral-700 mb-2">
@@ -62,8 +65,9 @@ export default function AddProjectModal({ isOpen, onClose, onAdd }) {
             />
           </div>
 
-          {/* School and Grade in one row */}
+          {/* School + Grade */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
             {/* School */}
             <div>
               <label className="block text-sm font-semibold text-neutral-700 mb-2">
@@ -77,11 +81,12 @@ export default function AddProjectModal({ isOpen, onClose, onAdd }) {
               />
             </div>
 
-            {/* Grade Selection */}
+            {/* Grade */}
             <div>
               <label className="block text-sm font-semibold text-neutral-700 mb-2">
                 Kelas <span className="text-red-500">*</span>
               </label>
+
               <div className="flex gap-2">
                 {['X', 'XI', 'XII'].map((grade) => (
                   <button
@@ -106,13 +111,15 @@ export default function AddProjectModal({ isOpen, onClose, onAdd }) {
             <label className="block text-sm font-semibold text-neutral-700 mb-2">
               Deskripsi Project <span className="text-red-500">*</span>
             </label>
+
             <textarea
               value={formData.description}
               onChange={(e) => handleChange('description', e.target.value)}
               placeholder="Jelaskan project Anda secara singkat..."
               rows={4}
-              className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-neutral-800 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all resize-none"
+              className="w-full px-4 py-3 bg-neutral-50 border border-neutral-300 rounded-xl text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all resize-none"
             />
+
             <p className="text-xs text-neutral-500 mt-1.5">
               Minimal 20 karakter, maksimal 300 karakter
             </p>
@@ -138,17 +145,15 @@ export default function AddProjectModal({ isOpen, onClose, onAdd }) {
               </div>
             </div>
           </div>
+
         </div>
 
         {/* Footer */}
         <div className="px-6 py-4 bg-neutral-50 border-t border-neutral-200 flex gap-3 justify-end">
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={onClose}
-          >
+          <Button type="button" variant="secondary" onClick={onClose}>
             Batal
           </Button>
+
           <Button
             type="button"
             variant="primary"

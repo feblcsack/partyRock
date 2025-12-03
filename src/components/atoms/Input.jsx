@@ -1,15 +1,22 @@
+// src/components/atoms/Input.jsx
 import React from 'react';
 
-const Input = ({ icon: Icon, className = '', ...props }) => {
+export default function Input({ 
+  type = 'text', 
+  value, 
+  onChange, 
+  placeholder = '', 
+  disabled = false,
+  className = ''
+}) {
   return (
-    <div className="relative w-full">
-      {Icon && <Icon className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 w-5 h-5" />}
-      <input 
-        className={`w-full ${Icon ? 'pl-10' : 'pl-4'} pr-4 py-2.5 bg-white border border-neutral-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all ${className}`}
-        {...props}
-      />
-    </div>
+    <input
+      type={type}
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      disabled={disabled}
+      className={`w-full px-4 py-3 bg-white border-2 border-neutral-300 rounded-xl text-neutral-900 font-medium placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 disabled:bg-neutral-100 disabled:text-neutral-500 disabled:cursor-not-allowed transition-all ${className}`}
+    />
   );
-};
-
-export default Input;
+}

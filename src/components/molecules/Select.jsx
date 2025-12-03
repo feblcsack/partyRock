@@ -1,34 +1,29 @@
+// src/components/molecules/Select.jsx
 import React from 'react';
 import { ChevronDown } from 'lucide-react';
 
-const Select = ({ value, onChange, options, icon: Icon, placeholder }) => {
+export default function Select({ value, onChange, options, icon: Icon }) {
   return (
-    <div className="relative w-full">
+    <div className="relative">
       {Icon && (
-        <Icon className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 w-4 h-4 z-10" />
+        <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+          <Icon className="w-5 h-5 text-neutral-500" />
+        </div>
       )}
-
       <select
-        className={`w-full ${Icon ? "pl-10" : "pl-4"} pr-10 py-2.5 bg-white border border-neutral-200 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none appearance-none cursor-pointer text-neutral-400`}
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        className={`w-full ${Icon ? 'pl-11' : 'pl-4'} pr-10 py-3 bg-white border-1 border-neutral-300 rounded-xl text-neutral-500 font-medium focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 transition-all appearance-none cursor-pointer`}
       >
-        {placeholder && (
-          <option value="" disabled hidden>
-            {placeholder}
-          </option>
-        )}
-
         {options.map((option) => (
-          <option key={option.value} value={option.value}>
+          <option key={option.value} value={option.value} className="font-medium">
             {option.label}
           </option>
         ))}
       </select>
-
-      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 w-4 h-4 pointer-events-none" />
+      <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+        <ChevronDown className="w-5 h-5 text-neutral-500" />
+      </div>
     </div>
   );
-};
-
-export default Select;
+}

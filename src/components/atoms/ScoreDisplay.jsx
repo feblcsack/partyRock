@@ -1,22 +1,32 @@
+// src/components/atoms/ScoreDisplay.jsx
 import React from 'react';
 
-const ScoreDisplay = ({ label, value, icon: Icon, color = 'emerald' }) => {
-  const colors = {
-    emerald: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-    amber: 'bg-amber-50 text-amber-700 border-amber-200',
-    blue: 'bg-blue-50 text-blue-700 border-blue-200',
-    purple: 'bg-purple-50 text-purple-700 border-purple-200'
+export default function ScoreDisplay({ label, score, color = 'emerald' }) {
+  const colorClasses = {
+    amber: 'from-amber-400 to-amber-500',
+    emerald: 'from-emerald-400 to-emerald-500',
+    blue: 'from-blue-400 to-blue-500',
+    purple: 'from-purple-400 to-purple-500'
   };
-  
+
+  const gradient = colorClasses[color] || colorClasses.emerald;
+
   return (
-    <div className={`p-3 rounded-lg border ${colors[color]} transition-all hover:shadow-sm`}>
-      <div className="flex items-center gap-1.5 mb-1">
-        {Icon && <Icon className="w-3.5 h-3.5" />}
-        <p className="text-xs font-medium">{label}</p>
+    <div>
+      <div className="flex justify-between items-center mb-1.5">
+        <span className="text-xs sm:text-sm font-bold text-neutral-700">
+          {label}
+        </span>
+        <span className="text-xs sm:text-sm font-bold text-neutral-900 bg-white px-2 py-0.5 rounded-md shadow-sm">
+          {score}
+        </span>
       </div>
-      <p className="text-lg font-bold">{value}</p>
+      <div className="h-2 sm:h-2.5 bg-neutral-200 rounded-full overflow-hidden shadow-inner">
+        <div 
+          className={`h-full bg-gradient-to-r ${gradient} rounded-full transition-all duration-500`}
+          style={{ width: `${score}%` }}
+        ></div>
+      </div>
     </div>
   );
-};
-
-export default ScoreDisplay;
+}
