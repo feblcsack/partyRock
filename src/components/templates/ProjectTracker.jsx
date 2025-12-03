@@ -1,12 +1,13 @@
 // src/components/templates/ProjectTracker.jsx
 import React, { useState, useMemo, useEffect } from 'react';
-import { Trophy, Plus, Filter, Search, LogOut, User, Folder, Users } from 'lucide-react';
+import { Trophy, Plus, Filter, Search, LogOut, User, Folder, Users, FileDown, Download } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { 
   getAllProjects, 
   addProject, 
   updateProjectScores 
 } from '../../services/ProjectService';
+import { exportToExcel, exportSchoolData } from '../../services/exportService';
 
 // Import Components
 import Button from '../atoms/Button';
@@ -16,6 +17,7 @@ import ProjectCard from '../organisms/ProjectCard';
 import TopProjectCard from '../organisms/TopProjectCard';
 import RatingModal from '../organisms/RatingModal';
 import AddProjectModal from '../organisms/AddProjectModal';
+import ExportModal from '../organisms/ExportModal';
 
 export default function ProjectTracker() {
   const { user, logout } = useAuth();
@@ -23,6 +25,7 @@ export default function ProjectTracker() {
   const [loading, setLoading] = useState(true);
   const [isRateModalOpen, setIsRateModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterSchool, setFilterSchool] = useState("All");
@@ -154,6 +157,16 @@ export default function ProjectTracker() {
     }
   };
 
+  const handleExportAll = () => {
+    exportToExcel(projects);
+    setIsExportModalOpen(false);
+  };
+
+  const handleExportSchool = (schoolName) => {
+    exportSchoolData(projects, schoolName);
+    setIsExportModalOpen(false);
+  };
+
   // Get top project
   const topProject = processedProjects.length > 0 && processedProjects[0].scores 
     ? processedProjects[0] 
@@ -164,7 +177,7 @@ export default function ProjectTracker() {
       <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-blue-50 flex items-center justify-center">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-emerald-500 border-t-transparent"></div>
-          <p className="mt-4 text-neutral-700 font-medium">Loading projects...</p>
+          <p className="mt-4 text-neutral-700 font-medium">Memuat projects...</p>
         </div>
       </div>
     );
@@ -183,9 +196,9 @@ export default function ProjectTracker() {
               </div>
               <div>
                 <h1 className="text-xl font-bold text-neutral-800">
-                  Sagasitas PartyRock Tracker
+                  Project Assessment Tracker
                 </h1>
-                <p className="mt-2 ml-3 text-xs text-neutral-500">
+                <p className="text-xs text-neutral-500">
                   Penilaian & Ranking Project Sekolah
                 </p>
               </div>
@@ -218,10 +231,19 @@ export default function ProjectTracker() {
               </Button>
 
               <Button 
-                variant="first"
+                variant="secondary"
+                onClick={() => setIsExportModalOpen(true)}
+                className="shadow-md"
+              >
+                <FileDown className="w-4 h-4" />
+                <span className="hidden sm:inline">Export Excel</span>
+              </Button>
+
+              <Button 
+                variant="secondary"
                 onClick={handleLogout}
               >
-                <LogOut className="w-4 h-4 text-white" />
+                <LogOut className="w-4 h-4" />
               </Button>
             </div>
           </div>
@@ -251,13 +273,13 @@ export default function ProjectTracker() {
               className={`px-6 py-2.5 rounded-lg font-medium text-sm transition-all duration-200 flex items-center gap-2 ${
                 viewMode === "all"
                   ? "bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-md shadow-emerald-500/30"
-                  : "text-neutral-300 hover:text-neutral-800 hover:bg-neutral-50"
+                  : "text-neutral-600 hover:text-neutral-800 hover:bg-neutral-50"
               }`}
             >
               <Users className="w-4 h-4" />
               Semua Project
               <span className={`px-2 py-0.5 rounded-md text-xs font-semibold ${
-                viewMode === "all" ? "bg-white/20" : "bg-neutral-600"
+                viewMode === "all" ? "bg-white/20" : "bg-neutral-100"
               }`}>
                 {projects.length}
               </span>
@@ -267,13 +289,13 @@ export default function ProjectTracker() {
               className={`px-6 py-2.5 rounded-lg font-medium text-sm transition-all duration-200 flex items-center gap-2 ${
                 viewMode === "mine"
                   ? "bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-md shadow-emerald-500/30"
-                  : "text-neutral-300 hover:text-neutral-800 hover:bg-neutral-50"
+                  : "text-neutral-600 hover:text-neutral-800 hover:bg-neutral-50"
               }`}
             >
               <Folder className="w-4 h-4" />
               Project Saya
               <span className={`px-2 py-0.5 rounded-md text-xs font-semibold ${
-                viewMode === "mine" ? "bg-white/20" : "bg-neutral-600"
+                viewMode === "mine" ? "bg-white/20" : "bg-neutral-100"
               }`}>
                 {myProjects.length}
               </span>
@@ -292,14 +314,12 @@ export default function ProjectTracker() {
               />
             </div>
             <div>
-            <Select
-  value={filterSchool}
-  onChange={setFilterSchool}
-  options={schoolOptions}
-  icon={Filter}
-  placeholder="Pilih sekolah..."
-/>
-
+              <Select 
+                value={filterSchool}
+                onChange={setFilterSchool}
+                options={schoolOptions}
+                icon={Filter}
+              />
             </div>
             <div>
               <Select 
@@ -414,6 +434,14 @@ export default function ProjectTracker() {
         isOpen={isAddModalOpen} 
         onClose={() => setIsAddModalOpen(false)} 
         onAdd={handleAddProject} 
+      />
+
+      <ExportModal 
+        isOpen={isExportModalOpen} 
+        onClose={() => setIsExportModalOpen(false)} 
+        projects={projects}
+        onExportAll={handleExportAll}
+        onExportSchool={handleExportSchool}
       />
     </div>
   );
