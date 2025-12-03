@@ -1,29 +1,33 @@
+// src/components/atoms/Button.jsx
 import React from 'react';
 
-const Button = ({ children, variant = 'primary', size = 'md', className = '', ...props }) => {
-  const baseStyles = 'font-medium rounded-lg transition-all duration-200 flex items-center justify-center gap-2';
+export default function Button({ 
+  children, 
+  variant = 'primary', 
+  onClick, 
+  disabled = false,
+  type = 'button',
+  className = '' 
+}) {
+  const baseStyles = 'inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed';
   
   const variants = {
-    primary: 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm hover:shadow-md active:scale-95',
-    secondary: 'bg-neutral-800 hover:bg-neutral-900 text-white shadow-sm hover:shadow-md active:scale-95',
-    outline: 'border-2 border-emerald-600 text-emerald-700 hover:bg-emerald-50 active:scale-95',
-    ghost: 'text-neutral-600 hover:bg-neutral-100 active:scale-95'
+    primary: 'bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-md hover:shadow-lg active:scale-95',
+    secondary: 'bg-neutral-100 hover:bg-neutral-200 text-neutral-700 hover:text-neutral-900 border border-neutral-300 active:scale-95',
+    danger: 'bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white shadow-md hover:shadow-lg active:scale-95',
+    ghost: 'hover:bg-neutral-100 text-neutral-600 hover:text-neutral-800 active:scale-95',
+    logout: 'bg-red-500 hover:bg-red-600 text-white shadow-lg shadow-red-400/40 active:scale-95'
+
   };
-  
-  const sizes = {
-    sm: 'px-3 py-1.5 text-sm',
-    md: 'px-4 py-2.5 text-sm',
-    lg: 'px-6 py-3 text-base'
-  };
-  
+
   return (
-    <button 
-      className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
-      {...props}
+    <button
+      type={type}
+      onClick={onClick}
+      disabled={disabled}
+      className={`${baseStyles} ${variants[variant]} ${className}`}
     >
       {children}
     </button>
   );
-};
-
-export default Button;
+}
